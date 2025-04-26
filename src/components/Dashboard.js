@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const [categories, setCategories] = useState([]);
-  const [transactions, setTransactions] = useState([]);
+  const [expenseSummary, setExpenseSummary] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -21,16 +20,10 @@ const Dashboard = () => {
       }
 
       try {
-        const [categoriesRes, transactionsRes] = await Promise.all([
-          axios.get('http://localhost:5150/api/category', {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get('http://localhost:5150/api/transaction', {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-        setCategories(categoriesRes.data);
-        setTransactions(transactionsRes.data);
+        const response = await axios.get('http://localhost:5150/api/expense', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setExpenseSummary(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
 
@@ -53,58 +46,15 @@ const Dashboard = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-
-  if (categories.length === 0 && transactions.length === 0) {
+  if (expenseSummary.length === 0) {
     return (
       <div className="empty-state">
         <div className="empty-card">
           <div className="empty-icon">📂</div>
-          <h2 className="empty-title">No Categories or Transactions</h2>
+          <h2 className="empty-title">No Expenses Recorded</h2>
           <p className="empty-description">
-            It looks like you haven't added any categories or transactions yet.<br />
-            Start organizing your expenses today!
-          </p>
-          <button 
-            className="empty-button" 
-            onClick={() => navigate('/addCategory')}
-          >
-            ➕ Add Category
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (categories.length === 0) {
-    return (
-      <div className="empty-state">
-        <div className="empty-card">
-          <div className="empty-icon">🗂️</div>
-          <h2 className="empty-title">No Categories</h2>
-          <p className="empty-description">
-            You haven't added any categories yet.<br />
-            Create your first category to start managing your expenses!
-          </p>
-          <button 
-            className="empty-button" 
-            onClick={() => navigate('/addCategory')}
-          >
-            ➕ Add Category
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (transactions.length === 0) {
-    return (
-      <div className="empty-state">
-        <div className="empty-card">
-          <div className="empty-icon">💸</div>
-          <h2 className="empty-title">No Transactions</h2>
-          <p className="empty-description">
-            It looks like you haven't added any transactions yet.<br />
-            Start tracking your expenses today!
+            It looks like you haven't recorded any expenses yet.<br />
+            Start tracking your spending today!
           </p>
           <button 
             className="empty-button" 
@@ -117,8 +67,6 @@ const Dashboard = () => {
     );
   }
 
-  // === Normal dashboard ===
-
   return (
     <div className="dashboard-container">
       <div className="chart-section">
@@ -126,7 +74,7 @@ const Dashboard = () => {
           <h1 className="dashboard-title">📊 Expenses Dashboard</h1>
           <p className="dashboard-subtitle">Track and manage your spending across all categories</p>
         </div>
-        <ExpenseChart categories={categories} transactions={transactions} />
+        <ExpenseChart expenseSummary={expenseSummary} />
       </div>
     </div>
   );

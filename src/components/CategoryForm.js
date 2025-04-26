@@ -35,9 +35,13 @@ const CategoryForm = ({ fetchCategories }) => {
 
       if (response.status === 200) {
         console.log('Category added successfully', response.data);
+        
         alert('Category added successfully!');
+
         setCategoryName('');
+
         if (fetchCategories) fetchCategories();
+
         navigate('/dashboard');
       }
 

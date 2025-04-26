@@ -1,29 +1,20 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS } from 'chart.js/auto';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-const ExpenseChart = ({ categories, transactions }) => {
-  // Фильтруем категории, у которых есть хотя бы одна транзакция
-  const filteredCategories = categories.filter((category) =>
-    transactions.some((t) => t.categoryId === category.id)
-  );
+// 👇 обязательно регистрируем элементы
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-  // Считаем сумму расходов по каждой из этих категорий
-  const categoryExpenses = filteredCategories.map((category) => {
-    return transactions
-      .filter((transaction) => transaction.categoryId === category.id)
-      .reduce((acc, transaction) => acc + parseFloat(transaction.amount), 0);
-  });
-
+const ExpenseChart = ({ expenseSummary }) => {
   const chartData = {
-    labels: filteredCategories.map((category) => category.name),
+    labels: expenseSummary.map((item) => item.categoryName),
     datasets: [
       {
-        data: categoryExpenses,
+        data: expenseSummary.map((item) => item.totalAmount),
         backgroundColor: [
           '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#FF9F40',
           '#FF5733', '#33FF57', '#FF33A1', '#33B5FF', '#FFB533',
-        ], // Colors for the chart
+        ],
       },
     ],
   };
