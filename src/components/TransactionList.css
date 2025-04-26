@@ -1,0 +1,79 @@
+.container {
+    background-color: #f4f4f4;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .item {
+    margin-bottom: 1rem;
+    background: #fff;
+    padding: 0.75rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .transactionRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .category {
+    font-style: italic;
+    color: #777;
+  }
+  
+  .editButton {
+    padding: 0.5rem 1rem;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .deleteButton {
+    padding: 0.5rem 1rem;
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .actionsRight {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 1rem;
+  }
+  
+  .filters {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
