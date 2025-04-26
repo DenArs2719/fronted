@@ -1,0 +1,39 @@
+.category-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  
+  .category-input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .category-input:focus {
+    outline: none;
+    border-color: #2E86C1;
+    box-shadow: 0 0 5px rgba(46, 134, 193, 0.5);
+  }
+  
+  .category-button {
+    padding: 0.75rem 1rem;
+    background-color: #2E86C1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .category-button:hover {
+    background-color: #1B4F72;
+  }
+  

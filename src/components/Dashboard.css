@@ -1,71 +1,50 @@
-.dashboard-container {
-    display: flex;
-    padding: 2rem;
-    gap: 1.5rem;
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-  
-  .chart-section {
-    flex: 2;
-    max-width: 600px;
-  }
-  
-  .form-section {
-    flex: 1;
-    margin-left: 1rem;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    padding: 1.5rem;
-    min-width: 280px;
-  }
-  
-  .dashboard-header {
-    margin-bottom: 1rem;
-    text-align: left;
-  }
-  
-  .dashboard-title {
-    font-size: 2.2rem;
-    color: #2E86C1;
-    margin-bottom: 0.2rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-  }
-  
-  .dashboard-subtitle {
-    font-size: 1rem;
-    color: #555;
-    font-weight: 400;
-    margin-top: 0.2rem;
-  }
-  
-  /* 📱 MOBILE / SMALL SCREEN */
-  @media (max-width: 768px) {
-    .dashboard-container {
-      flex-direction: column;
-      padding: 1rem;
-    }
-  
-    .chart-section,
-    .form-section {
-      max-width: 100%;
-      width: 100%;
-      margin-left: 0;
-    }
-  
-    .form-section {
-      margin-top: 1rem;
-    }
-  
-    .dashboard-title {
-      font-size: 1.8rem;
-    }
-  
-    .dashboard-subtitle {
-      font-size: 0.9rem;
-    }
-  }
-  
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  background: #f9fafb;
+}
+
+.empty-card {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.empty-title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.empty-description {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.empty-button {
+  background-color: #6366f1;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.empty-button:hover {
+  background-color: #4f46e5;
+}

@@ -20,16 +20,30 @@ const ExpenseChart = ({ categories, transactions }) => {
     datasets: [
       {
         data: categoryExpenses,
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#FF9F40'],
+        backgroundColor: [
+          '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#FF9F40',
+          '#FF5733', '#33FF57', '#FF33A1', '#33B5FF', '#FFB533',
+        ], // Colors for the chart
       },
     ],
   };
 
   return (
-    <div style={{ maxWidth: '600px', marginLeft: '150px' }}>
+    <div style={styles.chartContainer}>
       <Pie data={chartData} />
     </div>
   );
+};
+
+const styles = {
+  chartContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    maxWidth: '600px',
+    margin: '0 auto',
+    width: '100%',
+  },
 };
 
 export default ExpenseChart;

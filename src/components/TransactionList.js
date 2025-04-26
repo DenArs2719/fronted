@@ -1,10 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const TransactionList = ({ transactions, categories, fetchTransactions }) => {
+const TransactionList = ({ categories }) => {
   const token = localStorage.getItem('token');
+  const [transactions, setTransactions] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ amount: '', date: '', categoryId: '' });
+
+  // 🧠 Fetch transactions - now with useCallback
+  const fetchTransactions = useCallback(async () => {
+    try {
+      const res = await axios.get('http://localhost:5150/api/transaction', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTransactions(res.data);
+    } catch (err) {
+      console.error('Error fetching transactions', err);
+      if (err.response?.status === 401) {
+        alert('Session expired. Please log in again.');
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+    }
+  }, [token]);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [fetchTransactions]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this transaction?')) return;
@@ -70,7 +92,11 @@ const TransactionList = ({ transactions, categories, fetchTransactions }) => {
                   value={formData.date}
                   onChange={handleInputChange}
                 />
-                <select name="categoryId" value={formData.categoryId} onChange={handleInputChange}>
+                <select
+                  name="categoryId"
+                  value={formData.categoryId}
+                  onChange={handleInputChange}
+                >
                   <option value="">Select category</option>
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
@@ -93,8 +119,12 @@ const TransactionList = ({ transactions, categories, fetchTransactions }) => {
                   <span style={styles.category}>Category: {getCategoryName(tx.categoryId)}</span>
                 </div>
                 <div style={styles.actionsRight}>
-                  <button onClick={() => handleEditClick(tx)} style={styles.editButton}>Edit</button>
-                  <button onClick={() => handleDelete(tx.id)} style={styles.deleteButton}>Delete</button>
+                  <button onClick={() => handleEditClick(tx)} style={styles.editButton}>
+                    Edit
+                  </button>
+                  <button onClick={() => handleDelete(tx.id)} style={styles.deleteButton}>
+                    Delete
+                  </button>
                 </div>
               </div>
             )}
@@ -106,54 +136,47 @@ const TransactionList = ({ transactions, categories, fetchTransactions }) => {
 };
 
 const styles = {
-    container: { backgroundColor: '#f4f4f4', padding: '1rem', borderRadius: '8px' },
-    list: { listStyle: 'none', paddingLeft: 0 },
-    item: {
-      marginBottom: '1rem',
-      background: '#fff',
-      padding: '0.75rem',
-      borderRadius: '6px',
-      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-    },
-    transactionRow: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    category: { fontStyle: 'italic', color: '#777' },
-    editButton: {
-      padding: '0.5rem 1rem',
-      backgroundColor: '#4CAF50', // Green background
-      color: '#fff',
-      border: 'none',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      transition: 'all 0.3s ease', // Smooth transition for hover effect
-    },
-    deleteButton: {
-      padding: '0.5rem 1rem',
-      backgroundColor: '#f44336', // Red background
-      color: '#fff',
-      border: 'none',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      transition: 'all 0.3s ease', // Smooth transition for hover effect
-    },
-    editForm: { display: 'flex', flexDirection: 'column', gap: '0.5rem' },
-    actionsRight: {
-      display: 'flex',
-      gap: '0.5rem',
-      marginLeft: '1rem',
-    },
-    // Hover effects for buttons
-    editButtonHover: {
-      backgroundColor: '#45a049', // Darker green on hover
-    },
-    deleteButtonHover: {
-      backgroundColor: '#d32f2f', // Darker red on hover
-    },
-  };
+  container: { backgroundColor: '#f4f4f4', padding: '1rem', borderRadius: '8px' },
+  list: { listStyle: 'none', paddingLeft: 0 },
+  item: {
+    marginBottom: '1rem',
+    background: '#fff',
+    padding: '0.75rem',
+    borderRadius: '6px',
+    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+  },
+  transactionRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  category: { fontStyle: 'italic', color: '#777' },
+  editButton: {
+    padding: '0.5rem 1rem',
+    backgroundColor: '#4CAF50',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    transition: 'all 0.3s ease',
+  },
+  deleteButton: {
+    padding: '0.5rem 1rem',
+    backgroundColor: '#f44336',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    transition: 'all 0.3s ease',
+  },
+  editForm: { display: 'flex', flexDirection: 'column', gap: '0.5rem' },
+  actionsRight: {
+    display: 'flex',
+    gap: '0.5rem',
+    marginLeft: '1rem',
+  },
+};
 
 export default TransactionList;

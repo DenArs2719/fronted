@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { redirect, useNavigate } from 'react-router-dom';
 
 const TransactionForm = ({ fetchTransactions }) => {
   const [amount, setAmount] = useState('');
@@ -8,13 +9,29 @@ const TransactionForm = ({ fetchTransactions }) => {
   const [categories, setCategories] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate(); 
 
   const fetchCategories = async () => {
+    const userToken = localStorage.getItem('token');
+
+    if (!userToken) {
+      navigate('/login');
+      return;
+    }
+
     try {
-      const response = await axios.get('http://localhost:5150/api/category');
+      const response = await axios.get('http://localhost:5150/api/category', {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories', error);
+
+      if (error.response?.status === 401) {
+        alert('Session expired. Please log in again.');
+        localStorage.removeItem('token');
+        navigate('/login');
+      }
     }
   };
 
@@ -31,6 +48,7 @@ const TransactionForm = ({ fetchTransactions }) => {
 
     if (!userToken) {
       setErrorMessage('User is not logged in.');
+      navigate('/login');
       return;
     }
 
@@ -42,19 +60,36 @@ const TransactionForm = ({ fetchTransactions }) => {
     const newTransaction = { amount, categoryId, date };
 
     try {
-      await axios.post('http://localhost:5150/api/transaction', newTransaction, {
+      const response = await axios.post('http://localhost:5150/api/transaction', newTransaction, {
         headers: {
-          'Authorization': `Bearer ${userToken}`,
+          Authorization: `Bearer ${userToken}`,
         },
       });
-      fetchTransactions();
-      setAmount('');
-      setCategoryId('');
-      setDate('');
-      setErrorMessage('');
+
+      if (response.status === 200) {
+        console.log('Transaction added successfully', response.data);
+        if (typeof fetchTransactions === 'function') {
+          await fetchTransactions();
+        }
+
+        setAmount('');
+        setCategoryId('');
+        setDate('');
+        setErrorMessage('');
+        navigate('/dashboard')
+      } else {
+        setErrorMessage('There was an error adding the transaction.');
+      }
     } catch (error) {
       console.error('Error adding transaction', error);
-      setErrorMessage('There was an error adding the transaction.');
+
+      if (error.response?.status === 401) {
+        alert('Session expired. Please log in again.');
+        localStorage.removeItem('token');
+        navigate('/login');
+      } else {
+        setErrorMessage('There was an error adding the transaction.');
+      }
     }
   };
 
